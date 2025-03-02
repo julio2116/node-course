@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form
+      onsubmit="fetchData(event)"
+      id="form"
+      style="display: flex; flex-direction: column; width: 25%; justify-self: center;"
+    >
+      <label for="cep">Insira seu CEP:</label>
+      <input type="number" name="cep" id="cep" />
+      <label for="logradouro">Logradouro</label>
+      <input type="text" name="logradouro" disabled id="logradouro" />
+      <label for="bairro">Bairro</label>
+      <input type="text" name="bairro" disabled id="bairro" />
+      <label for="cidade">Cidade</label>
+      <input type="text" name="cidade" disabled id="cidade" />
+      <label for="estado">Estado</label>
+      <input type="text" name="estado" disabled id="estado" />
+      <button>Enviar</button>
+    </form>
+    <script>
+      const url = "https://viacep.com.br/ws/";
+
+      const logradouro = document.getElementById("logradouro");
+      const bairro = document.getElementById("bairro");
+      const cidade = document.getElementById("cidade");
+      const estado = document.getElementById("estado");
+
+      const writeDataFetch = (data) => {
+        logradouro.value = data.logradouro;
+        bairro.value = data.bairro;
+        cidade.value = data.localidade;
+        estado.value = data.estado;
+      };
+
+      const fetchData = async (e) => {
+        console.log(e);
+        e.preventDefault();
+        const dataForm = new FormData(e.target);
+        const cep = Object.fromEntries(dataForm).cep;
+        console.log(cep)
+        const fetchData = await fetch(`${url}${cep}/json/`);
+        const data = await fetchData.json();
+        writeDataFetch(data);
+      };
+    </script>
+  </body>
+</html>
